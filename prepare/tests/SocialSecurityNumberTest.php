@@ -9,73 +9,51 @@ require_once("system/SocialSecurityNumber.php");
 
 class SocialSecurityNumberTest extends \TDD\TestClass {
 
-	private $stringMock;
+	private $okNumStringMock;
 
 	public function setUp() {
-		$this->stringMock = \PHPMock::Mock("\NumericString");
-		$this->luhnMock = \PHPMock::Mock("\Luhn");
-	}
+		$this->okNumStringMock = \PHPMock::Mock("\NumericString");
+		$this->okNumStringMock->whenCalled("getLength")->thenReturn(10);
 
-	public function getSystemUnderTestInstance() {
-		//Not really used here...
-		return Null;
-	}
+		$this->okLuhnMock = \PHPMock::Mock("\Luhn");
+		$this->okLuhnMock->whenCalled("isLuhn")->thenReturn(true);
+		//$this->okLuhnMock->whenCalled("isLuhn",1)->thenReturn(true);
 
-	public function tearDown() {
-		
+		$this->okSUT = new \SocialSecurityNumber($this->okNumStringMock, $this->okLuhnMock);
 	}
 
 	public function constructorShouldThrowExceptionOnShortNumbers() {
-		
-		$this->stringMock->whenCalled("getLength")->thenReturn(9);
-
+		$toShortStringMock = \PHPMock::Mock("\NumericString");
+		$toShortStringMock->whenCalled("getLength")->thenReturn(9);
 
 		\TDD\Assert::expectException(new \Exception());
 
-		new \SocialSecurityNumber($this->stringMock, $this->luhnMock);
+		new \SocialSecurityNumber($toShortStringMock, $this->okLuhnMock);
 	}
 
-	public function constructorShouldNOTThrowExceptionOn10characters() {
-		$this->stringMock->whenCalled("getLength")->thenReturn(10);
-		$this->luhnMock->whenCalled("isLuhn")->thenReturn(true);
-		new \SocialSecurityNumber($this->stringMock, $this->luhnMock);
+	public function shouldThrowExceptionOnLuhnFalse() {
+		$notLuhnMock = \PHPMock::Mock("\Luhn");
+		$notLuhnMock->whenCalled("isLuhn")->thenReturn(false);
+
+		\TDD\Assert::expectException(new \Exception());
+		$sut = new \SocialSecurityNumber($this->okNumStringMock, $notLuhnMock);
 	}
 
 	public function getYearShouldReturnFirstTwoCharactersAsNumber() {
-		$this->stringMock->whenCalled("getLength")->thenReturn(10);
-		$this->luhnMock->whenCalled("isLuhn")->thenReturn(true);
-		$this->stringMock->whenCalled("getAt", 0)->thenReturn(1);
-		$this->stringMock->whenCalled("getAt", 1)->thenReturn(2);
+		$this->okNumStringMock->whenCalled("getAt", 0)->thenReturn(1);
+		$this->okNumStringMock->whenCalled("getAt", 1)->thenReturn(2);
 
-		$sut = new \SocialSecurityNumber($this->stringMock, $this->luhnMock);
+		$sut = new \SocialSecurityNumber($this->okNumStringMock, $this->okLuhnMock);
 
 		$actual = $sut->getYear();
 
 		\TDD\Assert::assertEquals($actual, 12);
 	}
 
-	public function shouldThrowExceptionOnLuhnFalse() {
-		$this->stringMock->whenCalled("getLength")->thenReturn(10);
-		$this->luhnMock->whenCalled("isLuhn")->thenReturn(false);
-
-		\TDD\Assert::expectException(new \Exception());
-		$sut = new \SocialSecurityNumber($this->stringMock, $this->luhnMock);
-	}
-
-	public function shouldNotThrowExceptionOnLuhnTrue() {
-		$this->stringMock->whenCalled("getLength")->thenReturn(10);
-		$this->luhnMock->whenCalled("isLuhn")->thenReturn(true);
-
-		$sut = new \SocialSecurityNumber($this->stringMock, $this->luhnMock);
-	}
+	
 
 	public function shouldCallIsLuhn() {
-		$this->stringMock->whenCalled("getLength")->thenReturn(10);
-		$this->luhnMock->whenCalled("isLuhn")->thenReturn(true);
-
-		$sut = new \SocialSecurityNumber($this->stringMock, $this->luhnMock);
-
-		$this->luhnMock->assertMethodWasCalled("isLuhn");
+		$this->okLuhnMock->assertMethodWasCalled("isLuhn");
 	}
 
 	

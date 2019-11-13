@@ -18,9 +18,9 @@ require_once("tests/IntegrationTests.php");
 //tests.php
 use TDD\TestSuite;
 $testSuite = new TestSuite();
-//$testSuite->addTest(new MockTests());
-//$testSuite->addTest(new test\ArrayUtilsTest());
-//$testSuite->addTest(new test\Exceptions());
+$testSuite->addTest(new MockTests());
+$testSuite->addTest(new test\ArrayUtilsTest());
+$testSuite->addTest(new test\Exceptions());
 $testSuite->addTest(new test\NumericStringTest());
 $testSuite->addTest(new test\LuhnTest());
 $testSuite->addTest(new test\SocialSecurityNumberTest());

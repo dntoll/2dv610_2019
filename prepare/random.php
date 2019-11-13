@@ -31,7 +31,7 @@ for ($i = 0; $i < NUM_RUNS; $i++) {
 	if ($actual !== $expected) {
 		echo "There is an error in ArrayUtils.max ";	
 	} else {
-		echo "The ArrayUtils.max works as specified for the provided input";	
+		//echo "The ArrayUtils.max works as specified for the provided input";	
 	}
 
 }

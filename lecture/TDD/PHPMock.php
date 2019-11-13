@@ -136,6 +136,13 @@ class PHPMock {
 		$activeCallIndex = $this->numCallsToMethod[$methodName] - 1;
 		if (isset($this->whenCalled[$methodName][$activeCallIndex]) ) {
 			return $this->whenCalled[$methodName][$activeCallIndex]->call($arguments);
+		} else {
+			//try repeat the last registered whenCalled for that method...
+			$lastRegisteredCallIndex = count($this->whenCalled[$methodName])-1;
+			if (isset($this->whenCalled[$methodName][$lastRegisteredCallIndex]) ) {
+				return $this->whenCalled[$methodName][$lastRegisteredCallIndex]->call($arguments);
+			}
+
 		}
 
 //		var_dump($this->whenCalled[$methodName]);
