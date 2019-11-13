@@ -1,1 +1,0 @@
-{"virtualbox":{"vagrant1":{"id":"vagrant1","owner":"www-data","group":"www-data","guestpath":"/vagrant/code","hostpath":"/home/ttoda/programming/2DV610/code","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/ttoda/programming/2DV610","disabled":false,"__vagrantfile":true}}}
